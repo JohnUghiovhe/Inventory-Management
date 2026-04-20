@@ -1,16 +1,23 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { InvoiceCard } from "../components/InvoiceCard";
-import { ThemeToggle } from "../components/ThemeToggle";
+import { useTheme } from "../context/ThemeContext";
 import { listInvoices } from "../lib/api";
 import { INVOICE_STATUSES } from "../lib/types";
 
 export function InvoiceListPage() {
+  const { theme, toggleTheme } = useTheme();
+  const defaultProfileImage =
+    "https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=160&w=160";
   const [selectedStatuses, setSelectedStatuses] = useState(INVOICE_STATUSES);
   const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [profileImage, setProfileImage] = useState(defaultProfileImage);
+  const [uploadedProfileUrl, setUploadedProfileUrl] = useState("");
+  const dropdownRef = useRef(null);
+  const profileInputRef = useRef(null);
 
   useEffect(() => {
     if (!selectedStatuses.length) {
@@ -29,17 +36,27 @@ export function InvoiceListPage() {
   }, [selectedStatuses]);
 
   useEffect(() => {
+    if (!dropdownOpen) {
+      return;
+    }
+
     const handleClickOutside = (event) => {
-      if (dropdownOpen && event.target.closest(".relative") === null) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setDropdownOpen(false);
       }
     };
 
-    if (dropdownOpen) {
-      document.addEventListener("click", handleClickOutside);
-      return () => document.removeEventListener("click", handleClickOutside);
-    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [dropdownOpen]);
+
+  useEffect(() => {
+    return () => {
+      if (uploadedProfileUrl) {
+        URL.revokeObjectURL(uploadedProfileUrl);
+      }
+    };
+  }, [uploadedProfileUrl]);
 
   const headingText = useMemo(() => {
     if (loading) {
@@ -57,46 +74,140 @@ export function InvoiceListPage() {
     });
   };
 
+  const handleProfileUpload = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    const nextUrl = URL.createObjectURL(file);
+    if (uploadedProfileUrl) {
+      URL.revokeObjectURL(uploadedProfileUrl);
+    }
+
+    setUploadedProfileUrl(nextUrl);
+    setProfileImage(nextUrl);
+  };
+
   return (
-    <main className="mx-auto w-full max-w-7xl animate-rise px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
-      <header className="mb-6 rounded-[32px] bg-gradient-to-r from-brand-700 via-brand-600 to-ink-700 p-6 text-white shadow-xl sm:p-7 lg:p-8">
-        <div className="flex flex-wrap items-start justify-between gap-5">
-          <div className="max-w-xl">
-            <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-white/70">Invoice Management</p>
-            <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl lg:text-[2.75rem]">Invoices</h1>
-            <p className="mt-3 text-sm leading-6 text-white/90 sm:text-[15px]">{headingText}</p>
+    <div className="min-h-screen lg:pl-36">
+      <aside className="flex h-20 items-stretch justify-between rounded-tr-xl rounded-br-xl bg-ink-700 pl-0 pr-4 shadow-lg sm:pr-6 lg:hidden">
+        <div className="relative h-full w-[72px] bg-brand-500" aria-label="Invoice logo" title="Invoice logo">
+          <div className="absolute bottom-0 left-0 h-8 w-full bg-brand-400/55" aria-hidden="true" />
+          <div className="absolute left-1/2 top-1/2 h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white" aria-hidden="true" />
+          <div className="absolute left-1/2 top-[26%] h-4 w-4 -translate-x-1/2 bg-brand-500" style={{ clipPath: "polygon(50% 0%, 100% 100%, 0% 100%)" }} aria-hidden="true" />
+        </div>
+
+        <div className="flex items-center gap-4">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-ink-400/40 bg-ink-600/65 transition hover:border-brand-300 hover:bg-ink-500/80"
+            aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            <span className={`h-2.5 w-2.5 rounded-full ${theme === "dark" ? "bg-ink-100" : "bg-brand-300"}`} aria-hidden="true" />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => profileInputRef.current?.click()}
+            className="group rounded-full ring-2 ring-transparent transition hover:ring-brand-400"
+            aria-label="Upload profile picture"
+            title="Upload profile picture"
+          >
+            <img src={profileImage} alt="Profile" className="h-10 w-10 rounded-full border-2 border-ink-500/60 object-cover" />
+          </button>
+          <input ref={profileInputRef} type="file" accept="image/*" className="hidden" onChange={handleProfileUpload} />
+        </div>
+      </aside>
+
+      <aside className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-20 lg:flex lg:w-24 lg:flex-col lg:overflow-hidden lg:rounded-tr-xl lg:rounded-br-xl lg:bg-ink-700 lg:shadow-2xl">
+        <div className="relative flex h-24 items-center justify-center bg-brand-500">
+          <div className="absolute bottom-0 left-0 h-12 w-full bg-brand-400/55" aria-hidden="true" />
+          <div className="relative z-10 h-11 w-11 rounded-full bg-white" aria-hidden="true" />
+          <div className="absolute left-1/2 top-[30%] z-20 h-5 w-5 -translate-x-1/2 bg-brand-500" style={{ clipPath: "polygon(50% 0%, 100% 100%, 0% 100%)" }} aria-label="Invoice logo" title="Invoice logo" />
+        </div>
+
+        <div className="flex flex-1 flex-col justify-end">
+          <div className="mb-7 flex items-center justify-center">
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-ink-400/40 bg-ink-600/60 transition hover:border-brand-300 hover:bg-ink-500/80"
+              aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              <span
+                className={`h-2.5 w-2.5 rounded-full ${theme === "dark" ? "bg-ink-100" : "bg-brand-300"}`}
+                aria-hidden="true"
+              />
+            </button>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 self-end">
-            <ThemeToggle />
-            
-            <div className="relative">
+          <div className="border-t border-ink-500/45 py-5">
+            <div className="flex items-center justify-center">
               <button
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="inline-flex items-center gap-2 rounded-full border border-white/40 px-4 py-2 text-sm font-bold text-white transition hover:bg-white/10"
+                type="button"
+                onClick={() => profileInputRef.current?.click()}
+                className="group rounded-full ring-2 ring-transparent transition hover:ring-brand-400"
+                aria-label="Upload profile picture"
+                title="Upload profile picture"
               >
-                Filter by Status
-                <span className={`transition-transform ${dropdownOpen ? "rotate-180" : ""}`}>
-                  ▼
+                <img
+                  src={profileImage}
+                  alt="Profile"
+                  className="h-10 w-10 rounded-full border-2 border-ink-500/60 object-cover"
+                />
+              </button>
+              <input
+                ref={profileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleProfileUpload}
+              />
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <main className="mx-auto w-full max-w-5xl animate-rise px-4 pb-6 pt-0 sm:px-6 sm:pb-8 sm:pt-2 lg:px-10 lg:py-12">
+        <header className="mb-8 flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight text-ink-900 dark:text-ink-100">Invoices</h1>
+            <p className="mt-1 text-sm font-medium text-ink-500 dark:text-ink-300">{headingText}</p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="relative" ref={dropdownRef}>
+              <button
+                type="button"
+                onClick={() => setDropdownOpen((open) => !open)}
+                className="inline-flex items-center gap-2 text-sm font-bold text-ink-900 transition hover:text-brand-600 dark:text-ink-100 dark:hover:text-brand-300"
+              >
+                Filter by status
+                <span className={`text-brand-500 transition-transform ${dropdownOpen ? "rotate-180" : ""}`} aria-hidden="true">
+                  ▾
                 </span>
               </button>
-              
+
               {dropdownOpen && (
-                <div className="absolute right-0 top-full mt-2 w-56 rounded-2xl border border-ink-200 bg-white shadow-lg dark:border-ink-700 dark:bg-ink-800 z-10">
-                  <div className="p-4 space-y-3">
+                <div className="absolute right-0 top-full z-10 mt-3 w-56 rounded-xl border border-ink-200 bg-white p-3 shadow-xl dark:border-ink-700 dark:bg-ink-700">
+                  <div className="space-y-2">
                     {INVOICE_STATUSES.map((status) => {
                       const isSelected = selectedStatuses.includes(status);
                       return (
                         <label
                           key={status}
-                          className="flex cursor-pointer items-center justify-between rounded-none border border-ink-200 bg-ink-50 px-3 py-2 text-sm font-medium text-ink-700 transition hover:border-brand-400 hover:bg-brand-50 dark:border-ink-700 dark:bg-ink-900/40 dark:text-ink-100 dark:hover:bg-brand-700/20"
+                          className="flex cursor-pointer items-center justify-between border border-ink-200 bg-ink-50 px-3 py-2 text-sm font-semibold text-ink-700 transition hover:border-brand-400 hover:bg-brand-50 dark:border-ink-600 dark:bg-ink-800 dark:text-ink-100 dark:hover:bg-brand-700/20"
                         >
                           <span>{status[0].toUpperCase() + status.slice(1)}</span>
                           <input
                             type="checkbox"
                             checked={isSelected}
                             onChange={() => handleToggleStatus(status)}
-                            className="h-4 w-4 rounded border-ink-300 text-brand-600 focus:ring-brand-500 cursor-pointer"
+                            className="h-4 w-4 rounded border-ink-300 text-brand-600 focus:ring-brand-500"
                           />
                         </label>
                       );
@@ -108,18 +219,14 @@ export function InvoiceListPage() {
 
             <Link
               to="/invoice/new"
-              className="inline-flex items-center gap-3 rounded-full bg-brand-500 pl-2 pr-5 py-2 text-sm font-bold text-white shadow transition hover:bg-brand-400"
+              className="inline-flex items-center gap-3 rounded-full bg-brand-500 pl-2 pr-5 py-2.5 text-sm font-bold text-white shadow transition hover:bg-brand-400"
             >
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white text-base font-bold leading-none text-brand-500">
-                +
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white text-base font-bold leading-none text-brand-500">+
               </span>
               New Invoice
             </Link>
           </div>
-        </div>
-      </header>
-
-      <div className="grid gap-6">
+        </header>
 
         <section aria-live="polite" className="space-y-4">
           {loading ? <p className="text-sm text-ink-600 dark:text-ink-300">Loading...</p> : null}
@@ -170,7 +277,7 @@ export function InvoiceListPage() {
             <InvoiceCard key={invoice.id} invoice={invoice} />
           ))}
         </section>
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }

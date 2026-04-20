@@ -78,7 +78,7 @@
     "paymentTerms": 30,
     "clientName": "Priya Rao",
     "clientEmail": "priya@northstar.design",
-    "status": "pending",
+    "status": "paid",
     "senderAddress": {
       "street": "15 Ikeja GRA",
       "city": "Ikeja",
@@ -93,14 +93,14 @@
     },
     "items": [
       {
-        "id": "item-6",
+        "id": "KiThcpJw",
         "name": "Audit workshop",
         "quantity": 1,
         "price": 900,
         "total": 900
       },
       {
-        "id": "item-7",
+        "id": "ygtej2LP",
         "name": "Design recommendations",
         "quantity": 1,
         "price": 1100,
