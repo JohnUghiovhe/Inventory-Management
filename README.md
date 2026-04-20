@@ -1,10 +1,5 @@
 # Invoice Management App
 
-A full-stack invoice management application with status workflows, validation, filtering, theme persistence, and responsive UI.
-
-## Table of Contents
-# Invoice Management App
-
 A full-stack invoice management app with invoice CRUD, status workflows, filtering, validation, dark/light theme persistence, and responsive UI.
 
 ## Quick Start
@@ -173,9 +168,7 @@ This separation keeps handlers small and logic easier to test.
 
 Statuses:
 
-- draft
-- pending
-- paid
+- draft, pending, paid
 
 Invoice shape:
 
@@ -266,8 +259,7 @@ npm run dev
 
 Expected endpoints:
 
-- API: http://localhost:4000
-- Client: http://localhost:5173 (or next available port)
+- API: http://localhost:4000, Client: http://localhost:5173 (or next available port)
 
 ### Run each process separately
 
@@ -278,15 +270,7 @@ npm run dev:client
 
 ### Script reference
 
-- npm run dev
-- npm run dev:server
-- npm run dev:client
-- npm run build
-- npm run build:client
-- npm run build:server
-- npm test
-- npm run test:watch
-- npm start
+- npm run dev, npm run dev:server, npm run dev:client, npm run build, npm run build:client, npm run build:server, npm test, npm run test:watch, npm start
 
 ## Testing
 
@@ -431,4 +415,3 @@ Already implemented beyond baseline CRUD:
 ---
 
 Portfolio tip: include screenshots or a short GIF walkthrough of create, edit, filter, and mark-paid flows.
-
