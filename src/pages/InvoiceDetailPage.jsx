@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ConfirmModal } from "../components/ConfirmModal";
 import { StatusBadge } from "../components/StatusBadge";
+import { ThemeToggle } from "../components/ThemeToggle";
 import { getInvoice, markAsPaid, removeInvoice } from "../lib/api";
 import { formatCurrency } from "../lib/format";
 
@@ -60,12 +61,22 @@ export function InvoiceDetailPage() {
   };
 
   if (loading) {
-    return <main className="mx-auto max-w-4xl px-4 py-8 text-ink-700 dark:text-ink-200">Loading...</main>;
+    return (
+      <main className="mx-auto max-w-4xl px-4 py-8 text-ink-700 dark:text-ink-200">
+        <div className="mb-4 flex justify-end">
+          <ThemeToggle />
+        </div>
+        Loading...
+      </main>
+    );
   }
 
   if (error || !invoice) {
     return (
       <main className="mx-auto max-w-4xl px-4 py-8">
+        <div className="mb-4 flex justify-end">
+          <ThemeToggle />
+        </div>
         <Link to="/" className="text-sm font-semibold text-brand-700 hover:underline dark:text-brand-300">
           Back to invoices
         </Link>
@@ -78,9 +89,12 @@ export function InvoiceDetailPage() {
 
   return (
     <main className="mx-auto max-w-6xl animate-rise px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
-      <Link to="/" className="text-sm font-semibold text-brand-700 hover:underline dark:text-brand-300">
-        Back to invoices
-      </Link>
+      <div className="flex items-center justify-between gap-3">
+        <Link to="/" className="text-sm font-semibold text-brand-700 hover:underline dark:text-brand-300">
+          Back to invoices
+        </Link>
+        <ThemeToggle />
+      </div>
 
       <section className="mt-4 rounded-[32px] border border-ink-200 bg-white p-6 shadow-lg dark:border-ink-700 dark:bg-ink-800 sm:p-7 lg:p-8">
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-ink-100 pb-5 dark:border-ink-700">

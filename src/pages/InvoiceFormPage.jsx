@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { InvoiceForm } from "../components/InvoiceForm";
+import { ThemeToggle } from "../components/ThemeToggle";
 import { createInvoice, getInvoice, updateInvoice } from "../lib/api";
 import { emptyInvoice } from "../lib/types";
 
@@ -63,7 +64,14 @@ export function InvoiceFormPage() {
   };
 
   if (loading) {
-    return <main className="mx-auto max-w-5xl px-4 py-8 text-ink-700 dark:text-ink-200">Loading...</main>;
+    return (
+      <main className="mx-auto max-w-5xl px-4 py-8 text-ink-700 dark:text-ink-200">
+        <div className="mb-4 flex justify-end">
+          <ThemeToggle />
+        </div>
+        Loading...
+      </main>
+    );
   }
 
   return (
@@ -75,6 +83,7 @@ export function InvoiceFormPage() {
           </Link>
           <h1 className="mt-2 text-2xl font-bold text-ink-900 dark:text-ink-100">{title}</h1>
         </div>
+        <ThemeToggle />
       </div>
 
       {error ? (
