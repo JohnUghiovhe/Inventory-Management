@@ -45,19 +45,20 @@ export function InvoiceListPage() {
   };
 
   return (
-    <main className="mx-auto w-full max-w-6xl animate-rise px-4 py-8 sm:px-6 lg:px-10">
-      <header className="mb-8 rounded-3xl bg-gradient-to-r from-brand-700 via-brand-600 to-ink-700 p-6 text-white shadow-xl">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-bold sm:text-4xl">Invoice Studio</h1>
-            <p className="mt-2 text-sm text-white/90">{headingText}</p>
+    <main className="mx-auto w-full max-w-7xl animate-rise px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
+      <header className="mb-6 rounded-[32px] bg-gradient-to-r from-brand-700 via-brand-600 to-ink-700 p-6 text-white shadow-xl sm:p-7 lg:p-8">
+        <div className="flex flex-wrap items-start justify-between gap-5">
+          <div className="max-w-xl">
+            <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-white/70">Invoice Management</p>
+            <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl lg:text-[2.75rem]">Invoice Studio</h1>
+            <p className="mt-3 text-sm leading-6 text-white/90 sm:text-[15px]">{headingText}</p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3 self-end">
             <ThemeToggle />
             <Link
               to="/invoice/new"
-              className="rounded-xl bg-white px-4 py-2 text-sm font-semibold text-ink-900 shadow transition hover:-translate-y-0.5 hover:bg-brand-50"
+              className="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-ink-900 shadow transition hover:-translate-y-0.5 hover:bg-brand-50"
             >
               New Invoice
             </Link>
@@ -65,10 +66,10 @@ export function InvoiceListPage() {
         </div>
       </header>
 
-      <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
+      <div className="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)] xl:grid-cols-[300px_minmax(0,1fr)]">
         <FilterPanel selected={selectedStatuses} onToggle={handleToggleStatus} />
 
-        <section aria-live="polite" className="space-y-4">
+        <section aria-live="polite" className="space-y-4 lg:pt-1">
           {loading ? <p className="text-sm text-ink-600 dark:text-ink-300">Loading...</p> : null}
 
           {error ? (
@@ -78,9 +79,9 @@ export function InvoiceListPage() {
           ) : null}
 
           {!loading && !error && !invoices.length ? (
-            <div className="rounded-2xl border border-dashed border-ink-300 bg-white/70 p-8 text-center dark:border-ink-600 dark:bg-ink-800/70">
+            <div className="rounded-[28px] border border-dashed border-ink-300 bg-white/70 p-10 text-center dark:border-ink-600 dark:bg-ink-800/70">
               <h2 className="text-lg font-semibold text-ink-900 dark:text-ink-100">No invoices found</h2>
-              <p className="mt-2 text-sm text-ink-600 dark:text-ink-300">
+              <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-ink-600 dark:text-ink-300">
                 Try changing the selected status filters or create a new invoice.
               </p>
             </div>

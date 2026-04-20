@@ -77,22 +77,23 @@ export function InvoiceDetailPage() {
   }
 
   return (
-    <main className="mx-auto max-w-5xl animate-rise px-4 py-8 sm:px-6 lg:px-10">
+    <main className="mx-auto max-w-6xl animate-rise px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
       <Link to="/" className="text-sm font-semibold text-brand-700 hover:underline dark:text-brand-300">
         Back to invoices
       </Link>
 
-      <section className="mt-4 rounded-3xl border border-ink-200 bg-white p-6 shadow-lg dark:border-ink-700 dark:bg-ink-800">
-        <div className="flex flex-wrap items-center justify-between gap-4">
+      <section className="mt-4 rounded-[32px] border border-ink-200 bg-white p-6 shadow-lg dark:border-ink-700 dark:bg-ink-800 sm:p-7 lg:p-8">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-ink-100 pb-5 dark:border-ink-700">
           <div>
-            <h1 className="text-2xl font-bold text-ink-900 dark:text-ink-100">#{invoice.id}</h1>
+            <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-ink-500 dark:text-ink-300">Invoice Detail</p>
+            <h1 className="mt-2 text-2xl font-bold tracking-tight text-ink-900 dark:text-ink-100">#{invoice.id}</h1>
             <p className="mt-1 text-sm text-ink-600 dark:text-ink-300">{invoice.description}</p>
           </div>
           <StatusBadge status={invoice.status} />
         </div>
 
-        <div className="mt-6 grid gap-6 md:grid-cols-2">
-          <article className="rounded-2xl bg-ink-50 p-4 dark:bg-ink-900/50">
+        <div className="mt-6 grid gap-6 md:grid-cols-[1fr_260px]">
+          <article className="rounded-[24px] bg-ink-50 p-5 dark:bg-ink-900/50">
             <h2 className="text-sm font-semibold uppercase tracking-[0.14em] text-ink-500 dark:text-ink-300">Bill To</h2>
             <p className="mt-2 text-sm font-medium text-ink-800 dark:text-ink-100">{invoice.clientName}</p>
             <p className="text-sm text-ink-700 dark:text-ink-200">{invoice.clientEmail}</p>
@@ -103,22 +104,22 @@ export function InvoiceDetailPage() {
             <p className="text-sm text-ink-700 dark:text-ink-200">{invoice.clientAddress.country}</p>
           </article>
 
-          <article className="rounded-2xl bg-ink-50 p-4 dark:bg-ink-900/50">
+          <article className="rounded-[24px] bg-ink-50 p-5 dark:bg-ink-900/50">
             <h2 className="text-sm font-semibold uppercase tracking-[0.14em] text-ink-500 dark:text-ink-300">Payment</h2>
             <p className="mt-2 text-sm text-ink-700 dark:text-ink-200">Created: {invoice.createdAt}</p>
             <p className="text-sm text-ink-700 dark:text-ink-200">Due: {invoice.paymentDue}</p>
             <p className="text-sm text-ink-700 dark:text-ink-200">Terms: {invoice.paymentTerms} days</p>
-            <p className="mt-2 text-xl font-bold text-ink-900 dark:text-ink-100">{formatCurrency(invoice.total)}</p>
+            <p className="mt-4 text-2xl font-bold tracking-tight text-ink-900 dark:text-ink-100">{formatCurrency(invoice.total)}</p>
           </article>
         </div>
 
-        <section className="mt-6 rounded-2xl border border-ink-200 dark:border-ink-700">
-          <h2 className="border-b border-ink-200 px-4 py-3 text-sm font-semibold uppercase tracking-[0.14em] text-ink-500 dark:border-ink-700 dark:text-ink-300">
+        <section className="mt-6 rounded-[24px] border border-ink-200 dark:border-ink-700">
+          <h2 className="border-b border-ink-200 px-4 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-ink-500 dark:border-ink-700 dark:text-ink-300">
             Items
           </h2>
           <ul className="divide-y divide-ink-200 dark:divide-ink-700">
             {invoice.items.map((item) => (
-              <li key={item.id} className="flex items-center justify-between px-4 py-3 text-sm">
+              <li key={item.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-4 text-sm">
                 <span className="font-medium text-ink-800 dark:text-ink-100">{item.name}</span>
                 <span className="text-ink-600 dark:text-ink-300">
                   {item.quantity} x {formatCurrency(item.price)} = <strong>{formatCurrency(item.total)}</strong>
@@ -128,7 +129,7 @@ export function InvoiceDetailPage() {
           </ul>
         </section>
 
-        <div className="mt-6 flex flex-wrap justify-end gap-3">
+        <div className="mt-6 flex flex-wrap justify-end gap-3 border-t border-ink-100 pt-6 dark:border-ink-700">
           <Link
             to={`/invoice/${invoice.id}/edit`}
             className="rounded-lg border border-ink-300 px-4 py-2 text-sm font-semibold text-ink-700 transition hover:bg-ink-100 dark:border-ink-600 dark:text-ink-200 dark:hover:bg-ink-700"

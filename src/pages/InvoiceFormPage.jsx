@@ -67,7 +67,7 @@ export function InvoiceFormPage() {
   }
 
   return (
-    <main className="mx-auto max-w-5xl animate-rise px-4 py-8 sm:px-6 lg:px-10">
+    <main className="mx-auto max-w-5xl animate-rise px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
       <div className="mb-5 flex items-center justify-between gap-3">
         <div>
           <Link to={id ? `/invoice/${id}` : "/"} className="text-sm font-semibold text-brand-700 hover:underline dark:text-brand-300">
