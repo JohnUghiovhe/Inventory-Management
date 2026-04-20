@@ -160,7 +160,7 @@ export function InvoiceForm({ initialData, mode, onSubmit, isSaving }) {
 
       <section className="grid gap-6 md:grid-cols-2">
         <AddressSection
-          title="Sender Address"
+          title="Bill From"
           prefix="sender"
           values={formValues.senderAddress}
           errors={errors}
@@ -168,7 +168,7 @@ export function InvoiceForm({ initialData, mode, onSubmit, isSaving }) {
         />
 
         <AddressSection
-          title="Client Address"
+          title="Bill To"
           prefix="client"
           values={formValues.clientAddress}
           errors={errors}
@@ -178,8 +178,8 @@ export function InvoiceForm({ initialData, mode, onSubmit, isSaving }) {
 
       <section>
         <div className="mb-3 flex items-center justify-between gap-4">
-          <h2 className="text-[11px] font-bold uppercase tracking-[0.18em] text-ink-500 dark:text-ink-300">
-            Invoice Items
+          <h2 className="text-sm font-extrabold uppercase tracking-[0.18em] text-ink-900 dark:text-ink-100">
+            Item List
           </h2>
         </div>
 
@@ -206,6 +206,15 @@ export function InvoiceForm({ initialData, mode, onSubmit, isSaving }) {
       </section>
 
       <div className="flex flex-wrap justify-end gap-3 border-t border-ink-100 pt-5 dark:border-ink-700">
+        <button
+          type="button"
+          disabled={isSaving}
+          onClick={() => window.history.back()}
+          className="rounded-full border border-ink-300 bg-white px-6 py-3 text-sm font-bold text-ink-700 transition hover:bg-ink-50 disabled:cursor-not-allowed disabled:opacity-60 dark:border-ink-600 dark:bg-ink-700 dark:text-ink-200 dark:hover:bg-ink-600"
+        >
+          Discard
+        </button>
+
         <button
           type="button"
           disabled={isSaving}

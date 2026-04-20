@@ -1,7 +1,7 @@
 const statusStyles = {
   draft: "bg-ink-200/85 text-ink-700 dark:bg-ink-600/35 dark:text-ink-200",
-  pending: "bg-brand-100 text-brand-700 dark:bg-brand-500/25 dark:text-brand-200",
-  paid: "bg-ink-300/80 text-ink-600 dark:bg-ink-500/30 dark:text-ink-100"
+  pending: "bg-pending-100 text-pending-700 dark:bg-pending-500/25 dark:text-pending-200",
+  paid: "bg-success-100 text-success-700 dark:bg-success-500/25 dark:text-success-200"
 };
 
 export function StatusBadge({ status }) {

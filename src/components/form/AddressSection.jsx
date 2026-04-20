@@ -11,7 +11,7 @@ const addressLabels = {
 export function AddressSection({ title, prefix, values, errors, onChange }) {
   return (
     <div>
-      <h2 className="mb-2 text-[11px] font-bold uppercase tracking-[0.18em] text-ink-500 dark:text-ink-300">{title}</h2>
+      <h2 className="mb-2 text-sm font-extrabold uppercase tracking-[0.18em] text-ink-900 dark:text-ink-100">{title}</h2>
       <div className="grid gap-3">
         {addressFields.map((field) => {
           const id = `${prefix}-${field}`;
