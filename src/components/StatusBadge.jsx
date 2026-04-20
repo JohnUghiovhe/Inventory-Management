@@ -7,7 +7,7 @@ const statusStyles = {
 export function StatusBadge({ status }) {
   return (
     <span
-      className={`inline-flex min-w-24 items-center justify-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] ${statusStyles[status]}`}
+      className={`inline-flex min-w-24 items-center justify-center gap-2 rounded-full px-3 py-2 text-[11px] font-bold uppercase tracking-[0.18em] ${statusStyles[status]}`}
     >
       <span className="h-2 w-2 rounded-full bg-current" aria-hidden="true" />
       {status}
