@@ -63,7 +63,7 @@ It uses React + Tailwind on the client and Express + TypeScript on the server.
 - Reusable form primitives to reduce duplication
 - Confirmation modal for destructive actions
 - Centralized backend error middleware
-- Desktop sidebar + responsive top bar navigation on tablet/mobile
+- Desktop sidebar with uploadable profile picture and responsive top bar navigation on tablet/mobile
 
 ## Tech Stack
 
@@ -151,7 +151,7 @@ React UI
 ### Frontend Architecture
 
 - Route-driven pages: list, detail, create/edit form.
-- Shared UI components for cards, filters, badges, and modal.
+- Shared UI components for cards, badges, and modal; status filtering lives in the invoice list header dropdown.
 - Reusable form primitives: InputField, FieldError, AddressSection, InvoiceItemRow.
 - Local state for page concerns; ThemeContext for global theme only.
 
@@ -343,6 +343,7 @@ Accessibility measures included:
 - Escape closes modal through reusable hook
 - Focus trap keeps tab navigation within modal while open
 - Initial modal focus is moved to a tabbable element
+- Status filter dropdown closes on Escape and returns focus to the trigger
 - Light/dark themes maintain usable visual hierarchy
 
 Recommended next step for a11y confidence:
@@ -411,7 +412,3 @@ Already implemented beyond baseline CRUD:
 - Add CI pipeline for lint, test, build, and security scans
 - Add containerized deployment setup
 - Add status/audit history tracking
-
----
-
-Portfolio tip: include screenshots or a short GIF walkthrough of create, edit, filter, and mark-paid flows.
