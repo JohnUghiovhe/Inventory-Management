@@ -32,7 +32,6 @@ export function InvoiceListPage() {
 
     setLoading(true);
     setError("");
-    setInvoices([]);
 
     listInvoices(selectedStatuses)
       .then((result) => {
