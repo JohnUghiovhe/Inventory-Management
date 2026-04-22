@@ -19,8 +19,11 @@ export function InvoiceListPage() {
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const dropdownButtonRef = useRef<HTMLButtonElement | null>(null);
   const profileInputRef = useRef<HTMLInputElement | null>(null);
+  const invoiceRequestIdRef = useRef(0);
 
   useEffect(() => {
+    const requestId = ++invoiceRequestIdRef.current;
+
     if (!selectedStatuses.length) {
       setInvoices([]);
       setLoading(false);
@@ -29,11 +32,24 @@ export function InvoiceListPage() {
 
     setLoading(true);
     setError("");
+    setInvoices([]);
 
     listInvoices(selectedStatuses)
-      .then((result) => setInvoices(result || []))
-      .catch((err: unknown) => setError(err instanceof Error ? err.message : "Unable to load invoices"))
-      .finally(() => setLoading(false));
+      .then((result) => {
+        if (invoiceRequestIdRef.current === requestId) {
+          setInvoices(result || []);
+        }
+      })
+      .catch((err: unknown) => {
+        if (invoiceRequestIdRef.current === requestId) {
+          setError(err instanceof Error ? err.message : "Unable to load invoices");
+        }
+      })
+      .finally(() => {
+        if (invoiceRequestIdRef.current === requestId) {
+          setLoading(false);
+        }
+      });
   }, [selectedStatuses]);
 
   useEffect(() => {
